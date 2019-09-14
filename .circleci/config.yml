@@ -1,0 +1,26 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+     - image: circleci/node:7.10
+    # working_directory:
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+          version: 18.09.3
+      - checkout
+      # - run:
+      #     name: Init
+      - run:
+          name: build
+          command: |
+            docker build -t kephin/react-app -f Dockerfile.dev .
+      # - run:
+      #     name: Lint
+      - run:
+          name: Test
+          command: |
+            docker run -e CI=true kephin/react-app npm test
+      # - run:
+      #     name: Push
